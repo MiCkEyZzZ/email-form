@@ -1,0 +1,57 @@
+<div class="flex flex-col justify-center items-center w-full h-screen">
+  <h1 class="text-2xl mb-10">Шаблонная форма</h1>
+
+  <div class="flex flex-row w-full max-w-3xl h-full max-h-80 px-5 py-5 border rounded-2xl">
+    <form (ngSubmit)="onSubmit()" #emailForm="ngForm">
+      <fieldset class="flex flex-col">
+        <label for="email" class="text-xs ml-1">Адрес эл. почты</label>
+        <input
+          id="email"
+          type="email"
+          class="h-10 pl-3 pr-5 border rounded"
+          required
+          name="email"
+          pattern=".+@.+\..+"
+          [(ngModel)]="email"
+          #emailControl='ngModel'
+          autocomplete="off"
+        />
+      </fieldset>
+
+      <ng-container *ngIf="emailForm.invalid && emailControl.touched">
+        <div *ngIf="emailControl.errors?.required">
+          <p class="text-xs ml-1 text-red-600">Введите адрес эл. почты</p>
+        </div>
+
+        <div *ngIf="emailControl.errors?.pattern">
+          <p class="text-xs ml-1 text-red-600">Введите валидный адрес эл. почты</p>
+        </div>
+      </ng-container>
+
+      <div class="mt-10">
+        <button
+          type="submit"
+          class="text-sm mr-3 px-5 py-2 text-white bg-emerald-600 border-emerald-600 rounded"
+          [ngClass]="{ 'opacity-50 cursor-not-allowed': emailForm.invalid }"
+          [disabled]="emailForm.invalid"
+        >Отправить</button>
+        <button
+          type="button"
+          class="text-sm px-3 py-2 text-white bg-red-700 border-red-700 rounded"
+          (click)="emailControl.reset()"
+        >Сбросить</button>
+      </div>
+    </form>
+    <div class="flex flex-col w-full ml-3 px-3 py-5 border rounded">
+      <p class="mt-1">Валидность формы:
+        <span class="text-red-600 mb-2">{{ emailForm.valid }}</span>
+      </p>
+      <p class="mt-1">Значение формы:
+        <span class="text-red-600">{{ emailForm.value | json }}</span>
+      </p>
+      <p class="mt-1">Ошибка:
+        <span class="text-red-600">{{ emailForm.controls.email?.errors | json }}</span>
+      </p>
+    </div>
+  </div>
+</div>
